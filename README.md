@@ -39,7 +39,11 @@ CREATE TABLE `flights` (
   `enabled` bit(1) DEFAULT NULL
 );
 
-ALTER TABLE `flights` MODIFY `id` int(12) NOT NULL AUTO_INCREMENT;
+``` 
+And then, add this 
+
+``` SQL
+ALTER TABLE `flights` ADD `id` INT(12) NULL DEFAULT NULL FIRST, ADD PRIMARY KEY (`id`)
 
 ```
 That's it!
