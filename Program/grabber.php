@@ -6,15 +6,37 @@
  */
 
 //Create database connection
-$mysql = new mysqli('localhost', 'root', '', 'FlightAwarePuller');
 
-//Use the SELECT statement to select everything in the database
-$query = $mysql->query("SELECT * FROM flights");
 
-//Open the csv file to place the data into with write mode enabled
-$csv = fopen("schedules.csv", "w");
+include ('../../phpvms/core/codon.config.php');
+include ('../../phpvms/core/local.config.php');
 
-//Loops all the rows in the database and writes them to the csv file
-while ($results = $query->fetch_assoc()) {
-    fputcsv($csv, $results);
+header('Content-Type: text/plain');
+header('Content-Disposition: attachment; filename="ics_schedules.csv"');
+
+
+
+
+$airlines = OperationsData::getAllAirlines($onlyenabled = true);
+$fp = fopen('php://output', 'w');
+$line = "code,flightnum,depicao,arricao,route,aircraft,flightlevel,distance,deptime,arrtime,flighttime,notes,price,flighttype,daysofweek,enabled, week1, week2, week3, week4";
+fputcsv($fp, explode(',', $line));
+
+foreach ($airlines as $airline) {
+  $sql = "SELECT * FROM flights WHERE code = '$airline->code'";
+  $flights = DB::get_results($sql);
+  foreach ($flights as $s) {
+
+    $flight_num = str_replace($airline->code, "", $s->flightnum);
+    $line = "{$s->code},{$flight_num},{$s->depicao},{$s->arricao}," . "{$s->route},{$s->tailnum},{$s->flightlevel},{$s->distance}," .
+        "{$s->deptime}, {$s->arrtime}, {$s->flighttime}, {$s->notes}, " . "{$s->price}, {$s->flighttype}, {$s->daysofweek}, {$s->enabled}, {$s->week1}, {$s->week2}, {$s->week3}, {$s->week4}";
+        fputcsv($fp, explode(',', $line));
+  }
+
+
+fclose($fp);
+
+
+
+
 }

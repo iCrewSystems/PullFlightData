@@ -20,6 +20,7 @@ CREATE DATABASE FligthAwarePuller;
 - Now we need to create a table in that database so we can send the data to it:
 ```SQL
 CREATE TABLE `flights` (
+  `id` int(12) NOT NULL,
   `code` varchar(3) DEFAULT NULL,
   `flightnum` varchar(6) DEFAULT NULL,
   `depicao` varchar(4) DEFAULT NULL,
@@ -37,6 +38,9 @@ CREATE TABLE `flights` (
   `daysofweek` int(11) DEFAULT NULL,
   `enabled` bit(1) DEFAULT NULL
 );
+
+ALTER TABLE `flights` MODIFY `id` int(12) NOT NULL AUTO_INCREMENT;
+
 ```
 That's it!
 - If you don't host your database locally from where you are running the script, change the mysql credentials on line #59.
@@ -72,6 +76,6 @@ To use this just run the puller.php in TestFiles/ :)
 Oh and btw, you're free to use the api keys and id you found here, they're from a free account which anyone can create.
 However, I do encourage you to create your own account and not rely on hoping that no-ones wastes all the queries in one go :).
 
-# TODO: 
+# TODO:
 
 - Come with suggestions!
